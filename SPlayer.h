@@ -14,7 +14,7 @@
 #define MIN_RATE		(0)
 #define MAX_RATE		(100)
 
-typedef uint8_t attr_t;
+typedef int8_t attr_t;
 
 enum EHeight
 {

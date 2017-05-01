@@ -56,3 +56,22 @@ attr_t Grade(FieldPlayer p)
 			PRECENT(p.lpass_rate, FIELDER_LPASS_IMPORTENCE) + PRECENT(p.spass_rate, FIELDER_SPASS_IMPORTENCE) +
 			PRECENT(p.team_rate, FIELDER_TEAM_IMPORTENCE) + PRECENT(p.basic_info.fitness, FIELDER_FITNESS_IMPORTENCE));
 }
+
+attr_t Grade(GeneralPlayer* p)
+{
+	switch (p->basic_info.role)
+	{
+		case eRole_GK:
+		{
+			return Grade(*(GKPlayer*)p);
+		}
+		case eRole_Field:
+		{
+			return Grade(*(FieldPlayer*)p);
+		}
+		default:
+		{
+			return -1;
+		}
+	}
+}

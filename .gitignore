@@ -30,5 +30,6 @@
 
 # Visual Studio Files
 .vs/
+Debug/
 *.sln
 *.vcxproj*

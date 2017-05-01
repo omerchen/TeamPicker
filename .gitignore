@@ -33,3 +33,6 @@
 Debug/
 *.sln
 *.vcxproj*
+
+# data-sets file
+*.bin

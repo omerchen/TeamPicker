@@ -3,6 +3,7 @@
 #include "FileHandler.h"
 #include "FileLogger.h"
 #include "FootballCalculator.h"
+#include "DataSetHandler.h"
 
 int main()
 {
@@ -46,6 +47,27 @@ int main()
 	avihai.team_rate = 85;
 	avihai.basic_info.fitness = 95;
 	printf("Avihai Ben David's grade is %d\n", Grade(avihai));
+
+	strcpy(omer.basic_info.first_name, "Omer");
+	strcpy(omer.basic_info.last_name, "Chen");
+	strcpy(yariv.basic_info.first_name, "Yariv");
+	strcpy(yariv.basic_info.last_name, "Gavriel");
+	strcpy(avihai.basic_info.first_name, "Avihai");
+	strcpy(avihai.basic_info.last_name, "Ben David");
+
+	omer.basic_info.role = eRole_GK;
+	yariv.basic_info.role = eRole_Field;
+	avihai.basic_info.role = eRole_Field;
+
+	GeneralPlayer* playersArr[3];
+	playersArr[0] = (GeneralPlayer*)(&omer);
+	playersArr[1] = (GeneralPlayer*)(&yariv);
+	playersArr[2] = (GeneralPlayer*)(&avihai);
+
+	DataSetHandler ds("DataSet.bin");
+
+	printf("%d\n",ds.WriteAll(playersArr, 2));
+
 	getchar();
 	return 0;
 }

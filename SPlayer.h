@@ -46,10 +46,12 @@ enum ERole
 	eRole_Field
 };
 
+#pragma pack(push, 1)
+
 struct Player
 {
-	char*		first_name;
-	char*		last_name;
+	char		first_name[NAME_MAX_SIZE] = { NULL_TERMINATOR };
+	char		last_name[NAME_MAX_SIZE] = { NULL_TERMINATOR };
 	EHeight		height;
 	EPhysical	physical;
 	ERole		role;
@@ -83,3 +85,5 @@ struct FieldPlayer
 	attr_t		dribble_rate;
 	attr_t		team_rate;
 };
+
+#pragma pack(pop)

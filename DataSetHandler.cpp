@@ -35,7 +35,7 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 		return DATA_SET_HANDLER_ERROR;
 	}
 
-	if (m_fileHandler.Open(eFileMode_Read))
+	if (!m_fileHandler.Open(eFileMode_Read))
 	{
 		return DATA_SET_HANDLER_ERROR;
 	}
@@ -69,7 +69,7 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 	for (int i = 0; i < len; i++)
 	{
 		ERole curRole;
-		if (m_fileHandler.Read((uint8_t*)&len, sizeof(ERole) != sizeof(ERole)))
+		if (m_fileHandler.Read((uint8_t*)&curRole, sizeof(ERole) != sizeof(ERole)))
 		{
 			m_fileHandler.Close();
 			return DATA_SET_HANDLER_ERROR;
@@ -80,7 +80,7 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 			eRole_GK:
 			{
 				playersArr[i] = (GeneralPlayer*)(new GKPlayer());
-				if (m_fileHandler.Read((uint8_t*)&playersArr[i], sizeof(GKPlayer) != sizeof(GKPlayer)))
+				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(GKPlayer) != sizeof(GKPlayer)))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
@@ -91,7 +91,7 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 			eRole_Field:
 			{
 				playersArr[i] = (GeneralPlayer*)(new FieldPlayer());
-				if (m_fileHandler.Read((uint8_t*)&playersArr[i], sizeof(FieldPlayer) != sizeof(FieldPlayer)))
+				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(FieldPlayer) != sizeof(FieldPlayer)))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
@@ -126,21 +126,21 @@ int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
 		return DATA_SET_HANDLER_ERROR;
 	}
 
-	if (m_fileHandler.Open(eFileMode_Write))
+	if (!m_fileHandler.Open(eFileMode_Write))
 	{
 		return DATA_SET_HANDLER_ERROR;
 	}
 
 	// write the version
 	uint8_t cur_version = VERSION;
-	if (m_fileHandler.Write(&cur_version, 1) != 1)
+	if (!m_fileHandler.Write(&cur_version, 1))
 	{
 		m_fileHandler.Close();
 		return DATA_SET_HANDLER_ERROR;
 	}
 	
 	// write the amount of players
-	if (m_fileHandler.Write((uint8_t*)&len, sizeof(size_t)) != sizeof(size_t))
+	if (!m_fileHandler.Write((uint8_t*)&len, sizeof(size_t)))
 	{
 		m_fileHandler.Close();
 		return DATA_SET_HANDLER_ERROR;
@@ -148,7 +148,7 @@ int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
 
 	for (int i = 0; i < len; i++)
 	{
-		if (m_fileHandler.Write((uint8_t*)&playersArr[i]->basic_info.role, sizeof(ERole)) != sizeof(ERole))
+		if (!m_fileHandler.Write((uint8_t*)&(playersArr[i]->basic_info.role), sizeof(ERole)))
 		{
 			m_fileHandler.Close();
 			return DATA_SET_HANDLER_ERROR;
@@ -158,22 +158,24 @@ int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
 		{
 			case eRole_GK:
 			{
-				if (m_fileHandler.Write((uint8_t*)&playersArr[i], sizeof(GKPlayer)) != sizeof(GKPlayer))
+				if (!m_fileHandler.Write((uint8_t*)(playersArr[i]), sizeof(GKPlayer)))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
 				}
 				break;
 			}
+
 			case eRole_Field:
 			{
-				if (m_fileHandler.Write((uint8_t*)&playersArr[i], sizeof(FieldPlayer)) != sizeof(FieldPlayer))
+				if (!m_fileHandler.Write((uint8_t*)(playersArr[i]), sizeof(FieldPlayer)))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
 				}
 				break;
 			}
+
 			default:
 			{
 				m_fileHandler.Close();

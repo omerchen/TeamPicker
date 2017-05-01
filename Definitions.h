@@ -3,6 +3,7 @@
 #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
 
 #define STRING_MAX_SIZE			(512)
+#define NAME_MAX_SIZE			(64)
 #define	NULL_TERMINATOR			('\0')
 
 #define PRECENT(value, precent)		((value * precent) / 100.0)

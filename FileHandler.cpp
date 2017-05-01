@@ -9,20 +9,7 @@ FileHandler::FileHandler() : m_isInit(false), m_path(nullptr), m_cursorIndex(0),
 
 FileHandler::~FileHandler()
 {
-	// First, close the file f is open
-	if (m_isInit && m_isOpen)
-	{
-		SafeClose();
-	}
 
-	// Then, free the path string from heap memory
-	if (m_path != nullptr)
-	{
-		delete[] m_path;
-	}
-
-	// Prevent double free of the memory
-	m_path = nullptr;
 }
 
 bool FileHandler::Init(const char* path, EFileOCMode ocMode)
@@ -32,16 +19,9 @@ bool FileHandler::Init(const char* path, EFileOCMode ocMode)
 		return false;
 	}
 
-	size_t pathLength = strlen(path);
+	m_path = (char*)path;
 
-	m_path = new char[pathLength + 1];
-
-	m_path[pathLength] = NULL_TERMINATOR;
-
-	if (strncpy(m_path, path, STRING_MAX_SIZE) == nullptr)
-	{
-		return false;
-	}
+	m_ocMode = ocMode;
 
 	m_isInit = true;
 
@@ -97,7 +77,7 @@ bool FileHandler::Write(const uint8_t* buffer, uint64_t length)
 
 	bool returnValue = (fwrite(buffer, sizeof(uint8_t), length, m_file) == length);
 
-	if (m_ocMode = eFileOCMode_Auto)
+	if (m_ocMode == eFileOCMode_Auto)
 	{
 		SafeClose();
 	}
@@ -129,7 +109,7 @@ uint64_t FileHandler::Read(uint8_t* o_buffer, uint64_t maxLength)
 
 	uint64_t readBytesAmount = fread(o_buffer, sizeof(uint8_t), maxLength, m_file);
 
-	if (m_ocMode = eFileOCMode_Auto)
+	if (m_ocMode == eFileOCMode_Auto)
 	{
 		SafeClose();
 	}
@@ -186,12 +166,12 @@ bool FileHandler::SafeOpen(EFileMode fileMode)
 
 	switch (fileMode)
 	{
-		eFileMode_Read:
+		case eFileMode_Read:
 		{
 			m_file = fopen(m_path, "rb");
 			break;
 		}
-		eFileMode_Write:
+		case eFileMode_Write:
 		{
 			m_file = fopen(m_path, "ab");
 			break;

@@ -202,7 +202,7 @@ int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
 
 	if (len == DATA_SET_HANDLER_ERROR)
 	{
-		return DATA_SET_HANDLER_ERROR;
+		len = 0;
 	}
 
 	GeneralPlayer** newArr = new GeneralPlayer*[len + 1];
@@ -221,7 +221,10 @@ int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
 		ans = false;
 	}
 
-	FREE_PLAYERS_ARR(arr, len);
+	if (len != 0)
+	{
+		FREE_PLAYERS_ARR(arr, len);
+	}
 	delete[] newArr;
 
 	if (ans)

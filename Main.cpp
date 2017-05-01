@@ -4,6 +4,7 @@
 #include "FileLogger.h"
 #include "FootballCalculator.h"
 #include "DataSetHandler.h"
+#include "PlayersListHandler.h"
 
 int main()
 {
@@ -63,7 +64,7 @@ int main()
 
 	DataSetHandler ds("DataSet.bin");
 
-	printf("%d\n",ds.WriteAll(playersArr, 2));
+	//printf("%d\n",ds.WriteAll(playersArr, 2));
 
 	GeneralPlayer** readArr;
 	size_t len = ds.ReadAll(readArr);
@@ -73,6 +74,18 @@ int main()
 	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&yariv));
 	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
 
+	
+	PlayersListHandler listHandler;
+	listHandler.LoadDataSet(readArr, len);
+	GeneralPlayer* playersByNames[4] = { 0 };
+	char* names[4] = { 0 };
+	char name0[] = "Yariv Gavriel";
+	char name1[] = "Omer Chen";
+	names[0] = name0;
+	names[1] = name1;
+	names[2] = name0;
+	names[3] = name0;
+	listHandler.FillListByNames(names, playersByNames, 4);
 	FREE_PLAYERS_ARR(readArr, len);
 	getchar();
 	return 0;

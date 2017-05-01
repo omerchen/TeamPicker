@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "Definitions.h"
 
-#define VERSION			(0)
+#define VERSION			(1)
 
 // DON'T CHANGE THIS!!
 #define MIN_RATE		(0)
@@ -50,8 +50,7 @@ enum ERole
 
 struct Player
 {
-	char		first_name[NAME_MAX_SIZE] = { NULL_TERMINATOR };
-	char		last_name[NAME_MAX_SIZE] = { NULL_TERMINATOR };
+	char		name[NAME_MAX_SIZE] = { NULL_TERMINATOR };
 	EHeight		height;
 	EPhysical	physical;
 	ERole		role;

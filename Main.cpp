@@ -48,12 +48,9 @@ int main()
 	avihai.basic_info.fitness = 95;
 	printf("Avihai Ben David's grade is %d\n", Grade(avihai));
 
-	strcpy(omer.basic_info.first_name, "Omer");
-	strcpy(omer.basic_info.last_name, "Chen");
-	strcpy(yariv.basic_info.first_name, "Yariv");
-	strcpy(yariv.basic_info.last_name, "Gavriel");
-	strcpy(avihai.basic_info.first_name, "Avihai");
-	strcpy(avihai.basic_info.last_name, "Ben David");
+	strcpy(omer.basic_info.name, "Omer Chen");
+	strcpy(yariv.basic_info.name, "Yariv Gavriel");
+	strcpy(avihai.basic_info.name, "Avihai Ben David");
 
 	omer.basic_info.role = eRole_GK;
 	yariv.basic_info.role = eRole_Field;

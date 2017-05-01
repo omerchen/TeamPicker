@@ -28,7 +28,7 @@ bool DataSetHandler::IsInit() const
 	return m_isInit;
 }
 
-size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
+int64_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 {
 	if (!IsInit() || !m_fileHandler.Seek(0))
 	{
@@ -56,8 +56,8 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 	}
 
 	// Check the amount of players in the cur data set for allocating enough space
-	size_t len;
-	if (m_fileHandler.Read((uint8_t*)&len, sizeof(size_t) != sizeof(size_t)))
+	int64_t len;
+	if (m_fileHandler.Read((uint8_t*)&len, sizeof(int64_t)) != sizeof(int64_t))
 	{
 		m_fileHandler.Close();
 		return DATA_SET_HANDLER_ERROR;
@@ -69,7 +69,7 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 	for (int i = 0; i < len; i++)
 	{
 		ERole curRole;
-		if (m_fileHandler.Read((uint8_t*)&curRole, sizeof(ERole) != sizeof(ERole)))
+		if (m_fileHandler.Read((uint8_t*)&curRole, sizeof(ERole)) != sizeof(ERole))
 		{
 			m_fileHandler.Close();
 			return DATA_SET_HANDLER_ERROR;
@@ -77,10 +77,10 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 
 		switch (curRole)
 		{
-			eRole_GK:
+			case eRole_GK:
 			{
 				playersArr[i] = (GeneralPlayer*)(new GKPlayer());
-				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(GKPlayer) != sizeof(GKPlayer)))
+				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(GKPlayer)) != sizeof(GKPlayer))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
@@ -88,10 +88,10 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 				break;
 			}
 
-			eRole_Field:
+			case eRole_Field:
 			{
 				playersArr[i] = (GeneralPlayer*)(new FieldPlayer());
-				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(FieldPlayer) != sizeof(FieldPlayer)))
+				if (m_fileHandler.Read((uint8_t*)(playersArr[i]), sizeof(FieldPlayer)) != sizeof(FieldPlayer))
 				{
 					m_fileHandler.Close();
 					return DATA_SET_HANDLER_ERROR;
@@ -101,12 +101,8 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 
 			default:
 			{
-				for (int j = 0; j < i; j++)
-				{
-					delete playersArr[j];
-				}
-
-				delete[] playersArr;
+				uint64_t curLen = i;
+				FREE_PLAYERS_ARR(playersArr, curLen);
 
 				m_fileHandler.Close();
 				return DATA_SET_HANDLER_ERROR;
@@ -119,11 +115,16 @@ size_t DataSetHandler::ReadAll(GeneralPlayer**& playersArr)
 	return len;
 }
 
-int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
+int64_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, int64_t len)
 {
 	if (playersArr == nullptr || !IsInit() || !m_fileHandler.Seek(0))
 	{
 		return DATA_SET_HANDLER_ERROR;
+	}
+
+	if (m_fileHandler.IsExist())
+	{
+		m_fileHandler.Remove();
 	}
 
 	if (!m_fileHandler.Open(eFileMode_Write))
@@ -140,7 +141,7 @@ int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
 	}
 	
 	// write the amount of players
-	if (!m_fileHandler.Write((uint8_t*)&len, sizeof(size_t)))
+	if (!m_fileHandler.Write((uint8_t*)&len, sizeof(int64_t)))
 	{
 		m_fileHandler.Close();
 		return DATA_SET_HANDLER_ERROR;
@@ -187,4 +188,46 @@ int8_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, size_t len)
 	m_fileHandler.Close();
 
 	return len;
+}
+
+int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
+{
+	if (player == nullptr || !IsInit() || !m_fileHandler.Seek(0))
+	{
+		return DATA_SET_HANDLER_ERROR;
+	}
+
+	GeneralPlayer** arr;
+	int64_t len = ReadAll(arr);
+
+	if (len == DATA_SET_HANDLER_ERROR)
+	{
+		return DATA_SET_HANDLER_ERROR;
+	}
+
+	GeneralPlayer** newArr = new GeneralPlayer*[len + 1];
+
+	for (int i = 0; i < len; i++)
+	{
+		newArr[i] = arr[i];
+	}
+
+	newArr[len] = player;
+
+	bool ans = true;
+
+	if (WriteAll(newArr, len + 1) != (len + 1))
+	{
+		ans = false;
+	}
+
+	FREE_PLAYERS_ARR(arr, len);
+	delete[] newArr;
+
+	if (ans)
+	{
+		return len + 1;
+	}
+
+	return DATA_SET_HANDLER_ERROR;
 }

@@ -5,12 +5,17 @@
 
 #pragma once
 
+#include <stddef.h>
 #include "Definitions.h"
 #include "FileHandler.h"
 #include "SPlayer.h"
 
 // Magic Numbers
 #define DATA_SET_HANDLER_ERROR		(-1)
+
+
+// Useful Macros
+#define FREE_PLAYERS_ARR(arr, len)		{for(int i=0;i<len;i++){delete arr[i];}delete[] arr;}
 
 /**
  * This class is to set/get/update the DataSet of vinter
@@ -26,9 +31,12 @@ public:
 
 	bool IsInit() const;
 
-	size_t ReadAll(GeneralPlayer**& playersArr);
+	int64_t ReadAll(GeneralPlayer**& playersArr);
 
-	int8_t WriteAll(GeneralPlayer** playersArr, size_t len);
+	int64_t WriteAll(GeneralPlayer** playersArr, int64_t len);
+
+	int64_t AppendPlayer(GeneralPlayer* player);
+	
 
 private:
 	bool m_isInit;

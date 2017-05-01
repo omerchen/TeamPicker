@@ -68,6 +68,15 @@ int main()
 
 	printf("%d\n",ds.WriteAll(playersArr, 2));
 
+	GeneralPlayer** readArr;
+	size_t len = ds.ReadAll(readArr);
+
+	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
+	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
+	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&yariv));
+	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
+
+	FREE_PLAYERS_ARR(readArr, len);
 	getchar();
 	return 0;
 }

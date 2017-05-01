@@ -4,6 +4,9 @@
 
 #define STRING_MAX_SIZE			(512)
 #define	NULL_TERMINATOR			('\0')
+
+#define PRECENT(value, precent)		((value * precent) / 100.0)
+
 #define __DEBUG_MODE
 
 #ifdef __DEBUG_MODE

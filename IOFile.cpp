@@ -35,10 +35,36 @@ bool IOFile::ReadInput(TPInput& o_input)
 		fseek(input_file, -1, SEEK_CUR);
 	}
 
+	fclose(input_file);
+
 	return true;
 }
 
 bool IOFile::WriteOutput(TPOutput& output)
 {
-	return false;
+	FILE* output_file = fopen(OUTPUT_PATH, "wb");
+
+	if (output_file == nullptr)
+	{
+		return false;
+	}
+
+	for (int i = 0; i < TEAMS_AMOUNT; i++)
+	{
+		if (i != 0)
+		{
+			fprintf(output_file, "\n");
+		}
+
+		fprintf(output_file, "Team %d:\n", (i+1));
+
+		for (int j = 0; j < TEAM_SIZE; j++)
+		{
+			fprintf(output_file, "\t%s\n", output.names[i][j]);
+		}
+	}
+
+	fclose(output_file);
+
+	return true;
 }

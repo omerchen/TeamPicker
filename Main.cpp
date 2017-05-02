@@ -190,6 +190,28 @@ int main()
 	{
 		printf("work :) :)\n");
 	}
+
+	TPOutput output;
+	strcpy(output.names[0][0], "Omer Chen");
+	strcpy(output.names[0][1], "Yariv Gavriel");
+	strcpy(output.names[0][2], "Amit Tzoref");
+	strcpy(output.names[0][3], "Noam Weinberger");
+	strcpy(output.names[0][4], "Yoni Kliger");
+	strcpy(output.names[1][0], "Dor Manella");
+	strcpy(output.names[1][1], "Avishai Idel");
+	strcpy(output.names[1][2], "Avihai Ben David");
+	strcpy(output.names[1][3], "Erez Hasson");
+	strcpy(output.names[1][4], "Aviv Ben Aharon");
+	strcpy(output.names[2][0], "Bar Fux");
+	strcpy(output.names[2][1], "Golan Madmon");
+	strcpy(output.names[2][2], "Amit Shkuri");
+	strcpy(output.names[2][3], "Yotam Cohen");
+	strcpy(output.names[2][4], "Hagay Ainemer");
+
+	if (IOFile::WriteOutput(output))
+	{
+		printf("output work also! :)\n");
+	}
 	getchar();
 	return 0;
 }

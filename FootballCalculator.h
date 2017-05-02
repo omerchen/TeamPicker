@@ -35,7 +35,7 @@
 #define FIELDER_FITNESS_IMPORTENCE			(10)
 
 
-#define TEAM_GK_BONUS						(50)
+#define TEAM_GK_BONUS						(10)
 
 attr_t Grade(GKPlayer p)
 {

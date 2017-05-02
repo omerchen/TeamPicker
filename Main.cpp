@@ -156,7 +156,7 @@ int main()
 	playersArr[1] = (GeneralPlayer*)(&yariv);
 	playersArr[2] = (GeneralPlayer*)(&avihai);
 
-	DataSetHandler ds("DataSet.bin");
+	DataSetHandler ds(DS_CUR_PATH);
 
 	//printf("%d\n",ds.WriteAll(playersArr, 2));
 
@@ -167,6 +167,7 @@ int main()
 	printf("the appending work?? %d\n", ds.Append((GeneralPlayer*)&omer));
 	printf("the appending work?? %d\n", ds.Append((GeneralPlayer*)&yariv));
 	printf("the appending work?? %d\n", ds.Append((GeneralPlayer*)&omer));
+
 	
 	PlayersListHandler listHandler;
 	listHandler.LoadDataSet(readArr, len);
@@ -179,11 +180,12 @@ int main()
 	names[2] = name0;
 	names[3] = name0;
 	listHandler.FillListByNames(names, playersByNames, 4);
+	printf("the grade of the team is %d and the len is %d\n", Grade(readArr, len), len);
 	FREE_PLAYERS_ARR(readArr, len);
 
-	Append("Ben Dotan", eHeight_Avg, ePhysical_Weak, ePenalty_Good, 65, 60, 85, 85, 90);
+	//Append("Ben Dotan", eHeight_Avg, ePhysical_Weak, ePenalty_Good, 65, 60, 85, 85, 90);
 	Append("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 85, 60, 75, 70, 88, 90, 85, 90);
-	Update("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 0, 60, 75, 70, 88, 90, 0, 90);
+	Update("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 85, 60, 75, 70, 88, 90, 85, 90);
 
 	TPInput input;
 	if (IOFile::ReadInput(input))

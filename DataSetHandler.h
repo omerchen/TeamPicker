@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <string.h>
 #include "Definitions.h"
 #include "FileHandler.h"
 #include "SPlayer.h"

@@ -6,6 +6,53 @@
 #include "DataSetHandler.h"
 #include "PlayersListHandler.h"
 
+#define DS_CUR_PATH		("DataSet.new.bin")
+
+void Append(char* name, EHeight height, EPhysical physical, EPenalty penalty, attr_t gk_rate, attr_t hpass, attr_t lpass, attr_t spass, attr_t fitness)
+{
+	GKPlayer gk;
+	gk.basic_info.height = height;
+	gk.basic_info.physical = physical;
+	gk.basic_info.penalty_rate = penalty;
+	gk.gk_rate = gk_rate;
+	gk.hpass_rate = hpass;
+	gk.lpass_rate = lpass;
+	gk.spass_rate = spass;
+	gk.basic_info.fitness = fitness;
+
+	gk.basic_info.role = eRole_GK;
+	
+	strcpy(gk.basic_info.name, name);
+
+	DataSetHandler ds(DS_CUR_PATH);
+	ds.AppendPlayer((GeneralPlayer*)&gk);
+}
+
+void Append(char* name, EHeight height, EPhysical physical, EPenalty penalty, attr_t attack, attr_t dribble, 
+			attr_t def, attr_t lpass, attr_t shoot, attr_t spass,attr_t speed, attr_t team, attr_t fitness)
+{
+	FieldPlayer fielder;
+	fielder.basic_info.height = height;
+	fielder.basic_info.physical = physical;
+	fielder.basic_info.penalty_rate = penalty;
+	fielder.attack_rate = attack;
+	fielder.dribble_rate = dribble;
+	fielder.def_rate = def;
+	fielder.lpass_rate = lpass;
+	fielder.shoot_rate = shoot;
+	fielder.spass_rate = spass;
+	fielder.speed_rate = speed;
+	fielder.team_rate = team;
+	fielder.basic_info.fitness = fitness;
+
+	fielder.basic_info.role = eRole_Field;
+
+	strcpy(fielder.basic_info.name, name);
+
+	DataSetHandler ds(DS_CUR_PATH);
+	ds.AppendPlayer((GeneralPlayer*)&fielder);
+}
+
 int main()
 {
 	GKPlayer omer;
@@ -73,7 +120,6 @@ int main()
 	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
 	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&yariv));
 	printf("the appending work?? %d\n", ds.AppendPlayer((GeneralPlayer*)&omer));
-
 	
 	PlayersListHandler listHandler;
 	listHandler.LoadDataSet(readArr, len);
@@ -87,6 +133,9 @@ int main()
 	names[3] = name0;
 	listHandler.FillListByNames(names, playersByNames, 4);
 	FREE_PLAYERS_ARR(readArr, len);
+
+	Append("Ben Dotan", eHeight_Avg, ePhysical_Weak, ePenalty_Good, 65, 60, 85, 85, 90);
+	Append("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 85, 60, 75, 70, 88, 90, 85, 90);
 	getchar();
 	return 0;
 }

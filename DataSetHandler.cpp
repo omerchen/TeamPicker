@@ -205,6 +205,16 @@ int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
 		len = 0;
 	}
 
+	for (int i = 0; i < len; i++)
+	{
+		if (strcmp(arr[i]->basic_info.name, player->basic_info.name) == 0)
+		{
+			FREE_PLAYERS_ARR(arr, len);
+
+			return DATA_SET_HANDLER_ERROR;
+		}
+	}
+
 	GeneralPlayer** newArr = new GeneralPlayer*[len + 1];
 
 	for (int i = 0; i < len; i++)

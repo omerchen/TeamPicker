@@ -5,6 +5,7 @@
 #include "FootballCalculator.h"
 #include "DataSetHandler.h"
 #include "PlayersListHandler.h"
+#include "IOFile.h"
 
 #define DS_CUR_PATH		("DataSet.new.bin")
 
@@ -183,6 +184,12 @@ int main()
 	Append("Ben Dotan", eHeight_Avg, ePhysical_Weak, ePenalty_Good, 65, 60, 85, 85, 90);
 	Append("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 85, 60, 75, 70, 88, 90, 85, 90);
 	Update("Aviv Ben Aharon", eHeight_Short, ePhysical_Weak, ePenalty_Good, 70, 0, 60, 75, 70, 88, 90, 0, 90);
+
+	TPInput input;
+	if (IOFile::ReadInput(input))
+	{
+		printf("work :) :)\n");
+	}
 	getchar();
 	return 0;
 }

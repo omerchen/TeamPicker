@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "Definitions.h"
 
 #define INPUT_PATH		("input.txt")
@@ -12,12 +14,12 @@
 
 struct TPInput
 {
-	char names[NAME_MAX_SIZE][PLAYERS_AMOUNT];
+	char names[PLAYERS_AMOUNT][NAME_MAX_SIZE];
 };
 
 struct TPOutput
 {
-	char names[NAME_MAX_SIZE][TEAM_SIZE][TEAMS_AMOUNT];
+	char names[TEAMS_AMOUNT][TEAM_SIZE][NAME_MAX_SIZE];
 };
 
 class IOFile

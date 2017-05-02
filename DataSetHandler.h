@@ -36,7 +36,9 @@ public:
 
 	int64_t WriteAll(GeneralPlayer** playersArr, int64_t len);
 
-	int64_t AppendPlayer(GeneralPlayer* player);
+	int64_t Append(GeneralPlayer* player);
+
+	int64_t Update(GeneralPlayer* player);
 	
 
 private:

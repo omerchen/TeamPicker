@@ -190,7 +190,7 @@ int64_t DataSetHandler::WriteAll(GeneralPlayer** playersArr, int64_t len)
 	return len;
 }
 
-int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
+int64_t DataSetHandler::Append(GeneralPlayer* player)
 {
 	if (player == nullptr || !IsInit() || !m_fileHandler.Seek(0))
 	{
@@ -243,4 +243,56 @@ int64_t DataSetHandler::AppendPlayer(GeneralPlayer* player)
 	}
 
 	return DATA_SET_HANDLER_ERROR;
+}
+
+int64_t DataSetHandler::Update(GeneralPlayer* player)
+{
+	if (player == nullptr || !IsInit() || !m_fileHandler.Seek(0))
+	{
+		return DATA_SET_HANDLER_ERROR;
+	}
+
+	GeneralPlayer** arr;
+	int64_t len = ReadAll(arr);
+
+	if (len == DATA_SET_HANDLER_ERROR)
+	{
+		len = 0;
+	}
+
+	GeneralPlayer* temp = nullptr;
+	int temp_index = -1;
+
+	for (int i = 0; i < len; i++)
+	{
+		if (strcmp(arr[i]->basic_info.name, player->basic_info.name) == 0)
+		{
+			temp = arr[i];
+			temp_index = i;
+			arr[i] = player;
+			break;
+		}
+	}
+
+	if (temp_index == -1 || temp == nullptr)
+	{
+		FREE_PLAYERS_ARR(arr, len);
+
+		return DATA_SET_HANDLER_ERROR;
+	}
+
+	if (WriteAll(arr, len) == DATA_SET_HANDLER_ERROR)
+	{
+		arr[temp_index] = temp;
+
+		FREE_PLAYERS_ARR(arr, len);
+
+		return DATA_SET_HANDLER_ERROR;
+	}
+
+	arr[temp_index] = temp;
+
+	FREE_PLAYERS_ARR(arr, len);
+
+	return len;
 }

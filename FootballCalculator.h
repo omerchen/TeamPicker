@@ -8,6 +8,9 @@
 #include "Definitions.h"
 #include "SPlayer.h"
 
+//Magic Numbers
+#define CALCULATOR_ERROR					(-1)
+
 // CALCULATOR-CONFIGURATIONS (%)
 #define GKPLAYER_HEIGHT_IMPORTENCE			(5)
 #define GKPLAYER_PYHSICAL_IMPORTENCE		(5)
@@ -30,6 +33,9 @@
 #define FIELDER_DRIBBLE_IMPORTENCE			(8)
 #define FIELDER_TEAM_IMPORTENCE				(8)
 #define FIELDER_FITNESS_IMPORTENCE			(10)
+
+
+#define TEAM_GK_BONUS						(50)
 
 attr_t Grade(GKPlayer p)
 {
@@ -74,4 +80,47 @@ attr_t Grade(GeneralPlayer* p)
 			return -1;
 		}
 	}
+}
+
+attr_t Grade(GeneralPlayer** players, size_t amount)
+{
+	if (amount == 0 || players == nullptr)
+	{
+		return CALCULATOR_ERROR;
+	}
+
+	double avg_players_grades = 0;
+	int gk_counter = 0;
+
+	for (int i = 0; i < amount; i++)
+	{
+		attr_t curGrade = Grade(players[i]);
+
+		if (curGrade == CALCULATOR_ERROR)
+		{
+			return CALCULATOR_ERROR;
+		}
+
+		avg_players_grades += curGrade;
+
+		if (players[i]->basic_info.role == eRole_GK)
+		{
+			gk_counter++;
+		}
+	}
+
+	if (gk_counter > 1)
+	{
+		return CALCULATOR_ERROR;
+	}
+
+	avg_players_grades /= amount;
+
+	if (gk_counter == 1)
+	{
+		avg_players_grades += PRECENT(avg_players_grades, TEAM_GK_BONUS);
+	}
+
+	return (attr_t)avg_players_grades;
+
 }
